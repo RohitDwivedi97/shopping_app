@@ -38,9 +38,14 @@ class Cart with ChangeNotifier {
                 title: title,
               ));
     }
+    notifyListeners();
   }
 
   Map<String, CartItem> get items {
     return {..._items};
+  }
+
+  int get totalItems {
+    return _items.length;
   }
 }
