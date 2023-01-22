@@ -41,6 +41,14 @@ class Cart with ChangeNotifier {
     notifyListeners();
   }
 
+  double get totalPrice {
+    var total = 0.0;
+    _items.forEach((key, cartItem) { 
+      total += cartItem.quantity * cartItem.price;
+    });
+    return total;
+  }
+
   Map<String, CartItem> get items {
     return {..._items};
   }
