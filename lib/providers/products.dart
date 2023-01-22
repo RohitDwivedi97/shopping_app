@@ -1,6 +1,5 @@
-
 import 'package:flutter/widgets.dart';
-import '../models/product.dart';
+import 'product.dart';
 
 
 // Mixins is used for sharing properties and methods with classes even if there isn't 
