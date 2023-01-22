@@ -46,4 +46,8 @@ class Products with ChangeNotifier {
   List<Product> get items {
     return [..._items];
   }
+
+  Product getProductById(String id) {
+    return _items.firstWhere((product) => product.id == id);
+  }
 }
