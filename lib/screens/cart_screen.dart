@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/cart.dart' show Cart; // avoiding name class of ClassItem in cart with CartItem widget.
+import '../providers/cart.dart'
+    show Cart; // avoiding name class of ClassItem in cart with CartItem widget.
 import '../widgets/cart_item.dart';
 
 class CartScreen extends StatelessWidget {
@@ -49,22 +50,26 @@ class CartScreen extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
-                itemCount: cart.totalItems,
-                itemBuilder: (ctx, i) {
-                  var cartItems = cart.items.values.toList();
+              itemCount: cart.totalItems,
+              itemBuilder: (ctx, i) {
+                var cartItems = cart.items.values.toList();
+                var productIds = cart.items.keys.toList();
 
-                  var id = cartItems[i].id; 
-                  var price = cartItems[i].price;
-                  var quantity = cartItems[i].quantity;
-                  var title = cartItems[i].title;
+                var id = cartItems[i].id;
+                var productId = productIds[i];
+                var price = cartItems[i].price;
+                var quantity = cartItems[i].quantity;
+                var title = cartItems[i].title;
 
-                  return CartItem(
-                    id: id,
-                    price: price,
-                    quantity: quantity,
-                    title: title,
-                  );
-                }),
+                return CartItem(
+                  id: id,
+                  productId: productId,
+                  price: price,
+                  quantity: quantity,
+                  title: title,
+                );
+              },
+            ),
           )
         ],
       ),
