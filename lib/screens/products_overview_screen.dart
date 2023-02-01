@@ -19,21 +19,40 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //add a flutter drawer and show options to open Orders
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            DrawerHeader(
+              child: Text('E commerce App.'),
+              decoration: BoxDecoration(
+                color: Colors.grey,
+              ),
+            ),
+            IconButton(
+              color: Colors.white,
+              icon: const Icon(Icons.dangerous),
+              onPressed: () {},
+            ),
+          ],
+        ),
+        backgroundColor: Theme.of(context).primaryColor,
+      ),
       appBar: AppBar(
         title: Text('My shop app'),
         actions: [
           Consumer<Cart>(
-            builder: (context, cart, ch) =>  Badge(
+            builder: (context, cart, ch) => Badge(
               value: cart.totalItems.toString(),
               color: Theme.of(context).accentColor,
               child: ch as Widget,
             ),
-            child:  IconButton(
-                icon: const Icon(Icons.shopping_cart),
-                onPressed: () {
-                  Navigator.of(context).pushNamed('/cart-screen');
-                },
-              ),
+            child: IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {
+                Navigator.of(context).pushNamed('/cart-screen');
+              },
+            ),
           ),
           PopupMenuButton(
             onSelected: (FiltersOption selectedValue) {

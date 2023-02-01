@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/cart.dart'
     show Cart; // avoiding name class of ClassItem in cart with CartItem widget.
 import '../widgets/cart_item.dart';
+import '../providers/orders.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/cart-screen';
@@ -42,7 +43,10 @@ class CartScreen extends StatelessWidget {
                   const SizedBox(width: 10),
                   OutlinedButton(
                     child: const Text('Order Now'),
-                    onPressed: () {},
+                    onPressed: () {
+                      Provider.of<Orders>(context, listen: false).addOrder(cart.items.values.toList(), cart.totalPrice);
+                      cart.clear();
+                    },
                   ),
                 ],
               ),

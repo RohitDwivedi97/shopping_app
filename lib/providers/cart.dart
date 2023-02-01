@@ -62,8 +62,10 @@ class Cart with ChangeNotifier {
     notifyListeners();
   }
 
+  //write a function to clear _items
   void clear() {
     _items = {};
     notifyListeners();
   }
+  
 }
