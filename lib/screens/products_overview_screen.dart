@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../widgets/products_grid.dart';
 import '../widgets/badge.dart';
 import '../providers/cart.dart';
+import '../widgets/app_drawer.dart';
 
 enum FiltersOption { FavouritesOnly, ShowAll }
 
@@ -20,24 +21,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       //add a flutter drawer and show options to open Orders
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            DrawerHeader(
-              child: Text('E commerce App.'),
-              decoration: BoxDecoration(
-                color: Colors.grey,
-              ),
-            ),
-            IconButton(
-              color: Colors.white,
-              icon: const Icon(Icons.dangerous),
-              onPressed: () {},
-            ),
-          ],
-        ),
-        backgroundColor: Theme.of(context).primaryColor,
-      ),
+      drawer: AppDrawer(),
       appBar: AppBar(
         title: Text('My shop app'),
         actions: [
