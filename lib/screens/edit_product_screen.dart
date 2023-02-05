@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../providers/product.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const routeName = '/edit-products-screen';
@@ -9,6 +10,14 @@ class EditProductScreen extends StatefulWidget {
 class _EditProductScreenState extends State<EditProductScreen> {
   final _imageUrlController = TextEditingController();
   final _imageUrlFocusNode = FocusNode();
+  final _form = GlobalKey<FormState>();
+  Product _product = Product(
+    id: '',
+    description: '',
+    title: '',
+    price: 0,
+    imageUrl: '',
+  );
 
   @override
   void initState() {
@@ -24,9 +33,22 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   void onFocus() {
-    if(!_imageUrlFocusNode.hasFocus) {
+    if (!_imageUrlFocusNode.hasFocus) {
       setState(() {});
     }
+  }
+
+  void saveForm() {
+    final isValid = _form.currentState!.validate();
+    if(!isValid) {
+      return;
+    }
+    _form.currentState!.save();
+    print(_product.id);
+    print(_product.title);
+    print(_product.description);
+    print(_product.price);
+    print(_product.imageUrl);
   }
 
   @override
@@ -34,10 +56,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Product'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.check),
+            splashRadius: 20,
+            splashColor: Colors.amber,
+            onPressed: () {
+              saveForm();
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
         child: Form(
+          key: _form,
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -47,21 +80,49 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   ),
                   textInputAction: TextInputAction.next,
                   autofocus: true,
+                  onSaved: (value) {
+                    _product = Product(
+                        id: _product.id,
+                        title: value as String,
+                        description: _product.description,
+                        price: _product.price,
+                        imageUrl: _product.imageUrl);
+                  },
+                  validator: (value) {
+                    if(value!.isEmpty) {
+                      return 'Please provide a value';
+                    }
+                    return null;
+                  },
                 ),
                 TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Price',
-                  ),
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.number,
-                ),
+                    decoration: const InputDecoration(
+                      labelText: 'Price',
+                    ),
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
+                    onSaved: (value) {
+                      _product = Product(
+                          id: _product.id,
+                          title: _product.title,
+                          description: _product.description,
+                          price: double.parse(value as String),
+                          imageUrl: _product.imageUrl);
+                    }),
                 TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Description',
-                  ),
-                  maxLines: 3,
-                  keyboardType: TextInputType.multiline,
-                ),
+                    decoration: const InputDecoration(
+                      labelText: 'Description',
+                    ),
+                    maxLines: 3,
+                    keyboardType: TextInputType.multiline,
+                    onSaved: (value) {
+                      _product = Product(
+                          id: _product.id,
+                          title: _product.title,
+                          description: value as String,
+                          price: _product.price,
+                          imageUrl: _product.imageUrl);
+                    }),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
@@ -82,10 +143,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           ? const Text('Add a URL.')
                           : FittedBox(
                               fit: BoxFit.contain,
-                              child: Image.network(
-                                _imageUrlController.text,
-                                height: 100.0
-                              ),
+                              child: Image.network(_imageUrlController.text,
+                                  height: 100.0),
                             ),
                     ),
                     Expanded(
@@ -96,7 +155,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         keyboardType: TextInputType.url,
                         controller: _imageUrlController,
                         textInputAction: TextInputAction.done,
-                        focusNode: _imageUrlFocusNode
+                        focusNode: _imageUrlFocusNode,
+                        onSaved: (value) {
+                          _product = Product(
+                            id: _product.id,
+                            title: _product.title,
+                            description: _product.description,
+                            price: _product.price,
+                            imageUrl: value as String,
+                          );
+                        },
                       ),
                     ),
                   ],
