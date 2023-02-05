@@ -7,6 +7,28 @@ class EditProductScreen extends StatefulWidget {
 }
 
 class _EditProductScreenState extends State<EditProductScreen> {
+  final _imageUrlController = TextEditingController();
+  final _imageUrlFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _imageUrlFocusNode.addListener(onFocus);
+  }
+
+  @override
+  void dispose() {
+    _imageUrlFocusNode.removeListener(onFocus);
+    _imageUrlFocusNode.dispose();
+    super.dispose();
+  }
+
+  void onFocus() {
+    if(!_imageUrlFocusNode.hasFocus) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,12 +55,51 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
                 ),
-                 TextFormField(
+                TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Description',
                   ),
                   maxLines: 3,
-                  keyboardType: TextInputType.multiline
+                  keyboardType: TextInputType.multiline,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 1,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      height: 100,
+                      width: 100,
+                      margin: const EdgeInsets.only(
+                        top: 8,
+                        right: 10,
+                      ),
+                      child: _imageUrlController.text.isEmpty
+                          ? const Text('Add a URL.')
+                          : FittedBox(
+                              fit: BoxFit.contain,
+                              child: Image.network(
+                                _imageUrlController.text,
+                                height: 100.0
+                              ),
+                            ),
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Image Url',
+                        ),
+                        keyboardType: TextInputType.url,
+                        controller: _imageUrlController,
+                        textInputAction: TextInputAction.done,
+                        focusNode: _imageUrlFocusNode
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
