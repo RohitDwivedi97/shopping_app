@@ -26,6 +26,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   textInputAction: TextInputAction.next,
                   autofocus: true,
                 ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Price',
+                  ),
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.number,
+                ),
               ],
             ),
           ),
