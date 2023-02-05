@@ -22,8 +22,31 @@ class CartItem extends StatelessWidget {
     return Dismissible(
       key: ValueKey(id),
       direction: DismissDirection.endToStart,
+      confirmDismiss: (direction) {
+        return showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+              title: const Text('Are you sure?'),
+              content:
+                  const Text('Do you want to remove the item fromt he cart?'),
+              actions: [
+                TextButton(
+                  child: const Text('Yes'),
+                  onPressed: () {
+                    Navigator.of(ctx).pop(true);
+                  },
+                ),
+                TextButton(
+                  child: const Text('No'),
+                  onPressed: () {
+                    Navigator.of(ctx).pop(false);
+                  },
+                ),
+              ]),
+        );
+      },
       onDismissed: (direction) {
-        // onDismissed expects direction parameter. Useful if we want to have different behaviour 
+        // onDismissed expects direction parameter. Useful if we want to have different behaviour
         // based on the direction of swipe.
         Provider.of<Cart>(context, listen: false).removeItem(productId);
       },
