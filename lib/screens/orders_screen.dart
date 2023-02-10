@@ -12,12 +12,12 @@ class OrdersScreen extends StatelessWidget {
     var ordersData = Provider.of<Orders>(context).orders;
 
     return Scaffold(
-      drawer: AppDrawer() ,
+      drawer: const AppDrawer() ,
       appBar: AppBar(
         title: const Text('Orders'),
       ),
       body: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         height: double.infinity,
         child: ListView.builder(
           itemBuilder: (ctx, i) => OrderItem(ordersData[i]),

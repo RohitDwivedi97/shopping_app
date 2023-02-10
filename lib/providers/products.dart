@@ -1,8 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'product.dart';
 
-
-// Mixins is used for sharing properties and methods with classes even if there isn't 
+// Mixins is used for sharing properties and methods with classes even if there isn't
 // any logical connection. We can extend only one class but can use any number of mixins.
 
 class Products with ChangeNotifier {
@@ -48,6 +47,32 @@ class Products with ChangeNotifier {
 
   List<Product> get items {
     return [..._items];
+  }
+
+  void addProduct(Product product) {
+    Product newProduct = Product(
+      id: DateTime.now().toString(),
+      title: product.title,
+      description: product.description,
+      imageUrl: product.imageUrl,
+      price: product.price,
+    );
+    _items.add(newProduct);
+    notifyListeners();
+  }
+
+  void editProduct(Product product) {
+    var index = _items.indexWhere((ele) => ele.id == product.id);
+    if (index != -1) {
+      _items[index] = product;
+      notifyListeners();
+    }
+  }
+
+  void deleteProductById(String productId) {
+    var index = _items.indexWhere((element) => element.id == productId);
+    _items.removeAt(index);
+    notifyListeners();
   }
 
   Product getProductById(String id) {

@@ -21,4 +21,11 @@ class Product with ChangeNotifier {
     isFavourite = !isFavourite;
     notifyListeners();
   }
+
+  bool isEmpty() {
+    if(id.isEmpty || title.isEmpty || description.isEmpty || price.toString() == '' || imageUrl.isEmpty) {
+      return true;
+    }
+    return false;
+  }
 }
