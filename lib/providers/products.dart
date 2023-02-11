@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'product.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 // Mixins is used for sharing properties and methods with classes even if there isn't
 // any logical connection. We can extend only one class but can use any number of mixins.
@@ -49,24 +51,34 @@ class Products with ChangeNotifier {
     return [..._items];
   }
 
-  void addProduct(Product product) {
-    Product newProduct = Product(
-      id: DateTime.now().toString(),
-      title: product.title,
-      description: product.description,
-      imageUrl: product.imageUrl,
-      price: product.price,
-    );
-    _items.add(newProduct);
-    notifyListeners();
+  Future<void> addProduct(Product product) {
+    Uri url = Uri.parse(
+        'https://shopapp-25e97-default-rtdb.firebaseio.com/products.json');
+    String productId;
+    return http
+        .post(url,
+            body: json.encode({
+              'title': product.title,
+              'description': product.description,
+              'imageUrl': product.imageUrl,
+              'price': product.price,
+              'isFavourite': product.isFavourite,
+            }))
+        .then((value) => {
+              productId = json.decode(value.body)['name'],
+              product.id = productId,
+              _items.add(product),
+              notifyListeners(),
+            });
   }
 
-  void editProduct(Product product) {
+  Future<void> editProduct(Product product) {
     var index = _items.indexWhere((ele) => ele.id == product.id);
     if (index != -1) {
       _items[index] = product;
       notifyListeners();
     }
+    return Future.value();
   }
 
   void deleteProductById(String productId) {
