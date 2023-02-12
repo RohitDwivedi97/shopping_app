@@ -17,14 +17,24 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   bool _showFavouritesOnly = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
     //Provider.of<Products>(context,listen: false).fetchAndSetProducts();
-    // 2nd way of using context things inside initState and the 3rd way is to use 
+    // 2nd way of using context things inside initState and the 3rd way is to use
     // DidChangeDependencies
-    Future.delayed(Duration.zero).then((value) =>
-        Provider.of<Products>(context, listen: false).fetchAndSetProducts());
+    setState(() {
+      _isLoading = true;
+    });
+    Future.delayed(Duration.zero)
+        .then((value) =>
+            Provider.of<Products>(context, listen: false).fetchAndSetProducts())
+        .then((_) {
+      setState(() {
+        _isLoading = false;
+      });
+    });
     super.initState();
   }
 
@@ -75,7 +85,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           )
         ],
       ),
-      body: ProductsGrid(_showFavouritesOnly),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductsGrid(_showFavouritesOnly),
     );
   }
 }
