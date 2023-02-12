@@ -51,10 +51,17 @@ class Products with ChangeNotifier {
     return [..._items];
   }
 
+  Future<void> fetchAndSetProducts() async {
+    final response = await http.get(Uri.parse('https://shopapp-25e97-default-rtdb.firebaseio.com/products.json'));
+    final products = json.decode(response.body);
+    
+    print(response);
+  }
+
   Future<void> addProduct(Product product) async {
     try {
       Uri url = Uri.parse(
-          'https://shopapp-25e97-default-rtdb.firebaseio.com/products');
+          'https://shopapp-25e97-default-rtdb.firebaseio.com/products.json');
       String productId;
       final response = await http.post(url,
           body: json.encode({

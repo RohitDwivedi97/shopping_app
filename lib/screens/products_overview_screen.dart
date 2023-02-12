@@ -4,6 +4,7 @@ import '../widgets/products_grid.dart';
 import '../widgets/badge.dart';
 import '../providers/cart.dart';
 import '../widgets/app_drawer.dart';
+import '../providers/products.dart';
 
 enum FiltersOption { FavouritesOnly, ShowAll }
 
@@ -16,6 +17,16 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   bool _showFavouritesOnly = false;
+
+  @override
+  void initState() {
+    //Provider.of<Products>(context,listen: false).fetchAndSetProducts();
+    // 2nd way of using context things inside initState and the 3rd way is to use 
+    // DidChangeDependencies
+    Future.delayed(Duration.zero).then((value) =>
+        Provider.of<Products>(context, listen: false).fetchAndSetProducts());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
