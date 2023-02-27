@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'package:shopping_app/models/http_exception.dart';
 import 'product.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../models/http_exception.dart';
 
 // Mixins is used for sharing properties and methods with classes even if there isn't
 // any logical connection. We can extend only one class but can use any number of mixins.
@@ -113,24 +113,22 @@ class Products with ChangeNotifier {
     return Future.value();
   }
 
-  void deleteProductById(String productId) {
-    final existingProductIndex = _items.indexWhere((item) => item.id == productId);
+  Future deleteProductById(String productId) async {
+    final existingProductIndex =
+        _items.indexWhere((item) => item.id == productId);
     var existingProduct = _items[existingProductIndex];
 
-    http.delete(
-      Uri.parse(
-          'https://shopapp-25e97-default-rtdb.firebaseio.com/products/'),
-    ).then((response) {
-      if(response.statusCode >= 400) {
-        throw HttpException('could not delete the product.');
-      }
-      existingProduct = null as Product;
-    }).catchError((erro) {
-      _items.insert(existingProductIndex,existingProduct);
-       notifyListeners();
-    });
-     _items.removeAt(existingProductIndex);
+    _items.removeAt(existingProductIndex);
     notifyListeners();
+    final response = await http.delete(
+      Uri.parse('https://shopapp-25e97-default-rtdb.firebaseio.com/products/$productId.json'),
+    );
+
+    if (response.statusCode >= 400) {
+      _items.insert(existingProductIndex, existingProduct);
+      notifyListeners();
+      throw HttpException('could not delete the product.');
+    }
   }
 
   Product getProductById(String id) {
