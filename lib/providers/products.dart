@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:shopping_app/models/http_exception.dart';
 import 'product.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -121,7 +122,7 @@ class Products with ChangeNotifier {
           'https://shopapp-25e97-default-rtdb.firebaseio.com/products/'),
     ).then((response) {
       if(response.statusCode >= 400) {
-        
+        throw HttpException('could not delete the product.');
       }
       existingProduct = null as Product;
     }).catchError((erro) {
